@@ -21,7 +21,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from colorthief import ColorThief
 from flask import Flask, Response, render_template, request, redirect
 
-from config import (
+from api.config import (
     ColorPalette,
     compact_svg_config,
     svg_config,
@@ -29,7 +29,7 @@ from config import (
     validate_background_type,
     validate_hex_color,
 )
-from exceptions import (
+from api.exceptions import (
     ImageProcessingError,
     MusicWidgetError,
     ServiceNotConfiguredError,
