@@ -32,7 +32,6 @@ class SpotifyConfig:
 
     # API URLs
     token_url: str = "https://accounts.spotify.com/api/token"
-    now_playing_url: str = "https://api.spotify.com/v1/me/player/currently-playing"
     recently_played_url: str = "https://api.spotify.com/v1/me/player/recently-played"
 
     def is_configured(self) -> bool:
