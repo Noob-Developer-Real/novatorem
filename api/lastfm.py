@@ -14,8 +14,8 @@ from typing import Any, Optional
 
 import requests
 
-from .config import lastfm_config
-from .exceptions import APIError, NoTracksError
+from config import lastfm_config
+from exceptions import APIError, NoTracksError
 
 
 @dataclass
