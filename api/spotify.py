@@ -18,8 +18,8 @@ from typing import Any, Optional
 
 import requests
 
-from config import spotify_config
-from exceptions import APIError, AuthenticationError, NoTracksError
+from api.config import spotify_config
+from api.exceptions import APIError, AuthenticationError, NoTracksError
 
 
 @dataclass
