@@ -281,58 +281,25 @@ def _extract_track_info(item: dict[str, Any], is_playing: bool) -> TrackInfo:
     )
 
 
-def get_now_playing() -> dict[str, Any]:
+def get_recently_played() -> dict[str, Any]:
     """
-    Get the currently playing or most recently played track from Spotify.
-    
-    Returns:
-        A normalized track object with the following structure:
-            - is_playing: bool - Whether the track is currently playing
-            - track_name: str - Name of the track
-            - artist_name: str - Name of the artist
-            - album_name: str - Name of the album
-            - album_art_url: str - URL to the album art
-            - track_url: str - URL to the track on Spotify
-            - artist_url: str - URL to the artist on Spotify
-            - audio_features: dict or None - Audio features (tempo, energy, etc.)
-    
-    Raises:
-        NoTracksError: If no tracks are available
-        APIError: If the API request fails
+    Get the most recently played track from Spotify API (Free-tier compatible).
     """
-    is_playing = False
-    item: Optional[dict[str, Any]] = None
 
-    # Try to get currently playing track
-    try:
-        data = _api_get(spotify_config.now_playing_url)
-        if data and "item" in data:
-            is_playing = data.get("is_playing", False)
-            item = data["item"]
-    except NoTracksError:
-        pass  # Fall through to get recent tracks
+    data = _api_get(f"{spotify_config.recently_played_url}?limit=1")
+    items = data.get("items", [])
 
-    # If not currently playing, get from recently played
-    if item is None:
-        data = _api_get(f"{spotify_config.recently_played_url}?limit=10")
-        items = data.get("items", [])
+    if not items:
+        raise NoTracksError("Spotify")
 
-        if not items:
-            raise NoTracksError("Spotify")
+    item = items[0]["track"]
 
-        # Pick a random recent track for variety
-        random_index = random.randint(0, len(items) - 1)
-        item = items[random_index]["track"]
-        is_playing = False
+    track_info = _extract_track_info(item, is_playing=False)
 
-    track_info = _extract_track_info(item, is_playing)
-
-    # Fetch audio features for BPM-synced animation
     audio_features = get_audio_features(track_info.track_id)
 
-    # Return as dictionary for compatibility with existing code
     return {
-        "is_playing": track_info.is_playing,
+        "is_playing": False,
         "track_name": track_info.track_name,
         "artist_name": track_info.artist_name,
         "album_name": track_info.album_name,
