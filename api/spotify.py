@@ -281,7 +281,7 @@ def _extract_track_info(item: dict[str, Any], is_playing: bool) -> TrackInfo:
     )
 
 
-def get_recently_played() -> dict[str, Any]:
+def get_now_playing() -> dict[str, Any]:
     """
     Get the most recently played track from Spotify API (Free-tier compatible).
     """
